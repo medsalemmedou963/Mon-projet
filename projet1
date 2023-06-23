@@ -1,0 +1,36 @@
+
+import pandas as pd
+import gradio as gr
+import matplotlib.pyplot as plt
+
+df = pd.read_csv('C:\\Users\\BK\\Desktop\\projet python\\Temperature3.csv')
+
+def afficher_previsions_meteo(lieu):
+    df_lieu = df[df['STATION_NAME'] == lieu]
+    
+    plt.figure(figsize=(10, 6))
+    plt.plot(df_lieu['DATE'], df_lieu['TMAX'], label='Température maximale')
+    plt.plot(df_lieu['DATE'], df_lieu['TMIN'], label='Température minimale')
+    plt.plot(df_lieu['DATE'], df_lieu['PRCP'], label='Précipitations')
+    plt.xlabel("Date")
+    plt.ylabel("Valeur")
+    plt.title(f"Prévisions météorologiques pour {lieu}")
+    plt.legend()
+    plt.xticks(rotation=45)
+    plt.show()
+
+def previsions_meteo_interactives(lieu):
+    afficher_previsions_meteo(lieu)
+
+# Crée l'interface Gradio
+interface = gr.Interface(
+    fn=previsions_meteo_interactives,
+    inputs=gr.inputs.Textbox(label="Lieu", default="PETERSBURG 2 N ND US"),
+    outputs=None,
+    title="Prévisions Météo Interactives",
+    description="Entrez un lieu et visualisez des graphiques ou des diagrammes interactifs, montrant les prévisions de température et de précipitations."
+)
+
+# Lance l'interface
+interface.launch()
+previsions_meteo_interactives("PETERSBURG 2 N ND US")
